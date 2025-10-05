@@ -14,3 +14,5 @@ export interface ApiParams {
 export type DailyData = {
     [date: string]: number;
 };
+
+export type TemperatureQueryT = 'higherThan' | 'lowerThan'

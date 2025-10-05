@@ -5,7 +5,7 @@ interface ValidationResponse {
     error?: string;
 }
 
-export function validateRainRequest(req: Request): ValidationResponse {
+function basicValidations(req: Request): ValidationResponse {
     const { startDate, endDate, latitude, longitude } = req.query;
 
     // Validación de presencia
@@ -33,6 +33,41 @@ export function validateRainRequest(req: Request): ValidationResponse {
         return {
             isValid: false,
             error: "Lat/Lon inválidos"
+        }
+    }
+
+    return { isValid: true }
+}
+
+export function validateRainRequest(req: Request): ValidationResponse {
+    return basicValidations(req);
+}
+
+export function validateTemperatureRequest(req: Request): ValidationResponse {
+    const basicValidation = basicValidations(req);
+    if (!basicValidation.isValid)
+        return basicValidation;
+
+    const { higherThan, lowerThan } = req.query;
+
+    if (!higherThan && !lowerThan) {
+        return {
+            isValid: false,
+            error: "Se debe incluir un parametro higherThan o lowerThan"
+        }
+    }
+
+    if (higherThan && lowerThan) {
+        return {
+            isValid: false,
+            error: "You must include higherThan or lowerThan parameter, but not both"
+        }
+    }
+
+    if (isNaN(Number(higherThan)) && isNaN(Number(lowerThan))) {
+        return {
+            isValid: false,
+            error: "higherThan or lowerThan parameter is not correct"
         }
     }
 
