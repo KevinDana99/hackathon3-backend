@@ -13,10 +13,7 @@ export function getTempProbability(data: DailyData, dayCount: number, value: num
 
 function getDaysWithEvent(data: DailyData, value: number, valueType: TemperatureQueryT) {
     let count = 0;
-    console.log(valueType);
     Object.entries(data).forEach(([key, dayValue]) => {
-        console.log('dayValue: ', dayValue)
-        console.log('value: ', value)
         if (valueType === 'higherThan' && dayValue > value)
             count++;
         if (valueType === 'lowerThan' && dayValue < value)
