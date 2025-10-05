@@ -1,7 +1,6 @@
 import type { Request, Response } from "express"
 import { validateRainRequest } from "../services/validations.js";
-import fetchNasaPower from "../services/api-query.js";
-import { format } from "date-fns";
+import { getRainDataOfDate } from "../services/rain-data.js";
 
 
 export default async function rainController(req: Request, res: Response) {
@@ -12,15 +11,13 @@ export default async function rainController(req: Request, res: Response) {
 
     const { startDate, endDate, latitude, longitude } = req.query;
 
-    if (startDate && endDate) {
-        const start = new Date(startDate.toString());
-        const end = new Date(endDate.toString());
+    if (!startDate || !endDate)
+        return res.status(400);
 
-        const response = fetchNasaPower({
-            start: format(start, 'yyyyMMdd'),
-            end: format(end, 'yyyyMMdd')
-        })
-    }
+    const start = new Date(startDate.toString());
+    const end = new Date(endDate.toString());
 
-    return res.json(req.query);
+    const rainData = await getRainDataOfDate(Number(latitude), Number(longitude), end);
+
+    return res.json(rainData);
 }

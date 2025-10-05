@@ -9,3 +9,4 @@ app.use(router);
 
 
 app.listen(PORT);
+console.log("Server listening at port ", PORT);

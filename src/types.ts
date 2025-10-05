@@ -5,7 +5,12 @@ export interface ApiParams {
     end: string,
     latitude: number,
     longitude: number,
-    parameter: Parameter,
+    parameters: Parameter,
     lowerThan?: number,
     higherThan?: number
 }
+
+
+export type DailyData = {
+    [date: string]: number;
+};

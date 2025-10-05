@@ -1,9 +1,8 @@
 import { URLSearchParams } from "url";
-import type { ApiParams } from "../types.js";
+import type { ApiParams, DailyData } from "../types.js";
+import { DAILY_URL, HOURLY_URL, COMMUNITY } from "../config/api.js";
 
-const BASE_URL = 'https://power.larc.nasa.gov/api/temporal/hourly/point';
-
-export default async function fetchNasaPower(params: ApiParams) {
+async function fetchNasaPower(params: ApiParams, baseURL: string): Promise<DailyData> {
     const queryParams = new URLSearchParams();
 
 
@@ -11,20 +10,34 @@ export default async function fetchNasaPower(params: ApiParams) {
         queryParams.append(key, value);
     }
 
-    const url = `${BASE_URL}?${queryParams.toString()}`;
+    queryParams.append('format', 'json');
+    queryParams.append('units', 'metric');
+    queryParams.append('community', COMMUNITY)
+
+    const url = `${baseURL}?${queryParams.toString()}`;
+    console.log('fetching to: ', url)
 
     try {
         const response = await fetch(url);
 
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            const errorText = await response.text();
+            throw new Error(`API Error: ${errorText}`);
         }
 
         const data = await response.json();
-        return data;
+        return data.properties.parameter[params.parameters];
 
     } catch (error) {
         console.error('Error fetching NASA POWER data:', error);
         throw error;
     }
+}
+
+export async function fetchHourlyNasaPower(params: ApiParams): Promise<DailyData> {
+    return fetchNasaPower(params, HOURLY_URL)
+}
+
+export async function fetchDailyNasaPower(params: ApiParams) {
+    return fetchNasaPower(params, DAILY_URL)
 }
