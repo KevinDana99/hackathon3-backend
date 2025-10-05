@@ -1,15 +1,17 @@
-import { MIN_RAIN_REQUIRED_FOR_POSITIVE } from "../config/parameters.js";
+import { CORRECTION_FACTOR_FOR_RAIN_CLUSTERING, MIN_RAIN_REQUIRED_FOR_POSITIVE } from "../config/parameters.js";
 import type { DailyData } from "../types.js";
 
 
 
-// Returns an array of probabilities
-export function getRainProbability(data: DailyData): number {
+
+export function getRainProbability(data: DailyData, dayCount: number): number {
     const daysWithRain = getDaysWithRain(data);
     const daysCount = Object.keys(data).length;
     if (daysCount === 0)
         return 0;
-    return daysWithRain / daysCount
+    const probOfRainInADay = daysWithRain / daysCount
+    const probOfNoRainInADay = 1 - probOfRainInADay;
+    return 1 - ((probOfNoRainInADay) ** (dayCount * CORRECTION_FACTOR_FOR_RAIN_CLUSTERING))
 }
 
 function getDaysWithRain(data: DailyData) {

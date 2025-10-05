@@ -15,7 +15,6 @@ async function fetchNasaPower(params: ApiParams, baseURL: string): Promise<Daily
     queryParams.append('community', COMMUNITY)
 
     const url = `${baseURL}?${queryParams.toString()}`;
-    console.log('fetching to: ', url)
 
     try {
         const response = await fetch(url);
