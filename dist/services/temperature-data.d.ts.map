@@ -1,0 +1,1 @@
+{"version":3,"file":"temperature-data.d.ts","sourceRoot":"","sources":["../../src/services/temperature-data.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,EAAa,SAAS,EAAE,iBAAiB,EAAE,MAAM,aAAa,CAAC;AAG3E,wBAAsB,iBAAiB,CAAC,QAAQ,EAAE,MAAM,EAAE,SAAS,EAAE,MAAM,EAAE,kBAAkB,EAAE,IAAI,EAAE,gBAAgB,EAAE,IAAI,EAAE,KAAK,EAAE,MAAM,EAAE,SAAS,EAAE,iBAAiB,sBAiCzK"}
